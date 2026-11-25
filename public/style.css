@@ -281,3 +281,146 @@ footer::before { content:""; position:absolute; top:-5px; left:0; right:0; borde
   .family-portrait { width:min(90%,370px); justify-self:center; }
   .maker-copy > p:first-child { margin-top:0; }
 }
+
+/* Paper pages and a counted-thread cover. The main reading surfaces stay plain. */
+html {
+  background: #f1ddda url("art/rose-sampler.webp") repeat 50% 0 / 224px auto;
+}
+body {
+  --paper:#fffaf2; --rose:#783f54; --ink:#392a2e; --line:#dbc5bf;
+  width:min(1400px,calc(100% - clamp(36px,8vw,140px)));
+  margin-inline:auto;
+  box-shadow:0 0 0 1px #cdb2a9,0 0 25px #57344218;
+}
+header { background:#fffaf4; border-bottom:3px double #c7a4a8; }
+.header { min-height:86px; }
+.header nav a { font-weight:500; }
+.header nav a[aria-current="page"] { border-bottom-style:dashed; }
+footer { background:#492f38; }
+footer::before { border-color:#8b5866; }
+.btn { border-radius:2px; }
+.btn:not(.outline):not(:disabled) { box-shadow:inset 0 0 0 2px var(--rose),inset 0 0 0 3px #d4a3ad; }
+.btn:not(.outline):hover:not(:disabled) { box-shadow:inset 0 0 0 2px #603045,inset 0 0 0 3px #deb9bc; }
+.eyebrow { letter-spacing:.16em; }
+.textlink { text-decoration-thickness:1px; text-underline-offset:.3em; }
+
+.thread-hero { border-bottom:0; }
+.thread-hero::after {
+  content:""; position:absolute; inset:auto 0 -1px; height:9px; pointer-events:none;
+  background:radial-gradient(ellipse at 50% 100%,var(--paper) 0 57%,transparent 62%) left bottom/20px 12px repeat-x;
+}
+.thread-hero-inner {
+  position:relative; display:grid; grid-template-columns:minmax(0,1.12fr) minmax(0,.88fr);
+  gap:clamp(1rem,4vw,4rem); min-height:clamp(365px,34vw,495px);
+  padding-block:clamp(2.3rem,4.1vw,4.4rem);
+}
+.thread-intro { max-width:100%; }
+.thread-intro h1 { font-size:clamp(3.4rem,6.7vw,6.25rem); line-height:.94; }
+.thread-art { opacity:.69; }
+.hero-engraving {
+  justify-self:center; width:min(100%,365px); height:auto;
+  filter:drop-shadow(1px 6px 2px #764a4521);
+}
+.thread-intro > p:not(.eyebrow) { max-width:33ch; }
+.facebook-section {
+  max-width:1060px; display:grid;
+  grid-template-columns:minmax(240px,330px) minmax(0,500px);
+  grid-template-rows:auto 1fr; grid-template-areas:"note title" "note posts";
+  align-items:start; justify-content:center; column-gap:clamp(2rem,6vw,6.5rem); row-gap:1rem;
+}
+.feed-copy { grid-area:title; max-width:none; }
+.feed-copy h2,.studio-note h2 { font-size:clamp(2.7rem,4vw,4rem); }
+.feed-copy .eyebrow { margin-bottom:.35rem; }
+.feed-copy .textlink { min-height:40px; }
+.timeline { grid-area:posts; }
+.timeline iframe { outline:1px solid var(--line); outline-offset:2px; }
+.studio-note {
+  grid-area:note; max-width:330px; margin:0;
+  padding:clamp(18px,2.1vw,30px); align-self:start;
+  background:#fffdf8;
+  border:1px solid var(--line); box-shadow:4px 5px 0 var(--petal);
+}
+.note-photo { position:relative; margin-bottom:1.7rem; }
+.note-photo > img:first-child { width:100%; height:auto; }
+.note-photo .note-seal { position:absolute; width:clamp(55px,6.2vw,80px); height:auto; right:-12px; bottom:-16px; border:3px solid #fffdf8; border-radius:50%; transform:rotate(5deg); }
+.studio-note h2 { font-size:clamp(2.3rem,3.3vw,3.2rem); }
+.studio-note p { line-height:1.65; }
+.studio-note .textlink { display:inline-flex; align-items:center; min-height:44px; }
+
+.maker-story { gap:0 clamp(2rem,5vw,4.8rem); }
+.family-portrait {
+  border:1px solid #b49b91; background:#fffdf7;
+  box-shadow:5px 6px 0 #edd7cd; transform:rotate(-1deg);
+}
+.family-portrait figcaption { border-top:1px dotted #bd9b9a; margin-top:.55rem; }
+.maker-hello { border-top:3px double var(--line); padding-top:1.1rem; }
+.maker-copy > p:first-child::first-letter {
+  float:left; font:500 3.25rem/.86 var(--serif); padding:.22rem .25rem 0 0; color:var(--rose);
+}
+.swatchbook .intro { max-width:52rem; }
+.swatchbook .filters { border-block:1px dashed #c5a2a6; padding:.65rem 0; margin:1.5rem 0 1.8rem; }
+.filters button { border-radius:2px; }
+.swatchbook .cards { grid-template-columns:repeat(auto-fit,minmax(min(100%,245px),1fr)); }
+.swatchbook .card { max-width:490px; }
+.swatchbook .card-img,.design-sheet .full-photo {
+  background-color:#f7e9e1;
+  background-image:repeating-linear-gradient(90deg,transparent 0 8px,#d9aca952 8px 10px,transparent 10px 14px);
+  padding:clamp(7px,.9vw,13px); border:1px solid #cba8aa; border-radius:2px;
+}
+.swatchbook .card-img { aspect-ratio:1.28; }
+.swatchbook .card-img img { border:1px solid #d9c7ba; border-radius:1px; background:#fffaf4; }
+.swatchbook .card-info { padding:.85rem .15rem 1rem; border-bottom-style:dashed; }
+.design-sheet .product-main { border-radius:0; }
+.contact-layout .intro { padding-block:1rem; border-block:3px double var(--line); }
+.contact-layout .formcard { background:#fffdf8; border-radius:2px; box-shadow:5px 5px 0 var(--petal); border-top:5px double #bf959f; }
+.admin .formcard { background:#fffdf8; border-radius:2px; border-top:3px double #bd929c; }
+@media (min-width:761px) and (min-height:770px) {
+  .studio-note { position:sticky; top:1.5rem; }
+}
+@media (max-width:900px) {
+  body { width:calc(100% - 32px); }
+  .facebook-section { column-gap:1.75rem; grid-template-columns:minmax(205px,.72fr) minmax(0,1.28fr); }
+}
+@media (max-width:760px) {
+  body { width:100%; box-shadow:none; }
+  .facebook-section { grid-template-columns:minmax(0,500px); grid-template-rows:auto; grid-template-areas:"title" "posts" "note"; row-gap:1rem; }
+  .studio-note { max-width:none; margin-top:1.3rem; }
+  .note-photo { max-width:240px; }
+  .header { min-height:0; }
+}
+@media (max-width:620px) {
+  .thread-hero-inner {
+    grid-template-columns:minmax(0,1fr) clamp(62px,20vw,104px);
+    grid-template-areas:"place place" "title title" "description drawing" "actions actions";
+    min-height:0; gap:.55rem .85rem; padding:1.65rem 0 1.9rem;
+  }
+  .thread-intro { display:contents; }
+  .thread-intro .eyebrow { grid-area:place; margin:0; }
+  .thread-intro h1 { grid-area:title; font-size:clamp(2.8rem,11.3vw,4.05rem); max-width:100%; }
+  .thread-intro > p:not(.eyebrow) { grid-area:description; max-width:27ch; font-size:1rem; margin:.2rem 0; }
+  .thread-intro .actions { grid-area:actions; margin-top:.15rem; }
+  .hero-engraving { grid-area:drawing; width:100%; transform:rotate(3deg); }
+  .thread-art { opacity:.7; }
+  .thread-hero::after { height:7px; }
+  .facebook-section { padding-top:1.1rem; }
+  .feed-copy .eyebrow { margin-bottom:.15rem; }
+  .feed-copy .textlink { min-height:44px; }
+  .feed-copy h2 { font-size:2.7rem; }
+  .maker-story { row-gap:1.4rem; }
+  .maker-hello { border-top:0; padding:0; }
+  .family-portrait { width:min(90%,355px); }
+  .swatchbook .cards { grid-template-columns:repeat(auto-fit,minmax(min(100%,175px),1fr)); }
+  .swatchbook .card-info h3 { font-size:1.85rem; }
+  .contact-layout .intro { border-top:0; padding-top:0; }
+  .note-photo { max-width:210px; }
+}
+/* A fabric strip carries the sampler onto screens without outer margins. */
+footer { border-top:0; }
+footer::before { position:static; display:block; height:48px; border-block:1px dashed #bc8f98; background:#faeee5 url("art/rose-sampler.webp") repeat-x center 28% / 166px auto; }
+@media(max-width:620px) { footer::before { height:38px; } }
+
+@media(max-width:370px) {
+  .header { width:calc(100% - 14px); }
+  .header nav { gap:0; }
+  .header nav a { font-size:.82rem; padding-inline:0; }
+}

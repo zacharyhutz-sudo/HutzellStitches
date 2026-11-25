@@ -80,14 +80,15 @@ if (timeline) {
   const frame = document.createElement('iframe');
   frame.title = 'Recent Facebook posts from Hutzell Stitches Embroidery';
   frame.loading = 'lazy';
-  frame.height = '540';
+  const feedUrl = new URL(timeline.dataset.timeline);
+  frame.height = feedUrl.searchParams.get('height');
   frame.referrerPolicy = 'strict-origin-when-cross-origin';
   let previousWidth = 0;
   function fitTimeline() {
     const width = Math.min(500, Math.floor(timeline.clientWidth));
     if (width < 180 || width === previousWidth) return;
     previousWidth = width;
-    const url = new URL(timeline.dataset.timeline);
+    const url = new URL(feedUrl);
     url.searchParams.set('width', String(width));
     frame.width = String(width);
     frame.src = url.href;
