@@ -136,3 +136,108 @@ textarea{resize:vertical}
 }
 @media(max-width:370px){.actions{align-items:stretch;flex-direction:column}.cards{grid-template-columns:1fr}.foot{align-items:flex-start;flex-direction:column}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* The studio's circular maker's mark and blush label treatment. */
+:root { --paper:#fffaf4; --petal:#f4e1df; --ink:#382a2b; --rose:#754052; --line:#ddc4c3; }
+.header { min-height:94px; }
+.brand { gap:.8rem; }
+.brand img { width:62px; height:62px; object-fit:contain; }
+.brand span { font-size:2rem; }
+.brand small { letter-spacing:.25em; }
+.hero { background:linear-gradient(110deg,#faeeea,#f3dedd); }
+.hero .herogrid { max-width:1340px; width:calc(100% - clamp(36px,8vw,120px)); gap:clamp(1.5rem,4vw,5rem); align-items:center; padding-block:clamp(2rem,4.4vw,4.3rem); grid-template-columns:minmax(0,.94fr) minmax(0,1.06fr); }
+.herocopy { padding:0; }
+.herocopy h1 { font-size:clamp(3.25rem,5.6vw,5.6rem); line-height:.99; }
+.herocopy .eyebrow { letter-spacing:.12em; }
+.heroart { min-height:0; aspect-ratio:1.38; border:6px solid var(--paper); outline:1px solid #d9bdb9; border-radius:4px; background:#ead3d1; }
+.heroart img { border-radius:1px; }
+.heroart.garment img { object-fit:contain; }
+.actions .textlink { display:inline-flex;align-items:center;min-height:44px; padding:.5rem .25rem; }
+.hero .actions { column-gap:1.35rem; }
+.card-img { border:1px solid var(--line); background:#f6ebe6; }
+.card-img img { object-fit:contain; }
+.card-info { padding-inline:.15rem; }
+.storystrip { background:#f7e8e5; border:0; }
+.storyinner img { height:auto; object-fit:contain; }
+.about-img { background:var(--petal); border:1px solid var(--line); }
+.about article { max-width:54ch; }
+.product-main { background:#f7eee8; border:1px solid var(--line); }
+.detail .option-fields { padding-top:.1rem; }
+.formcard { background:#fffaf6; border-color:#d5bdbb; }
+#form-status:not(:empty) { margin:0 0 .3rem; }
+footer { position:relative; border-top:8px solid #efd8d8; }
+footer::before { content:""; position:absolute; top:-5px; left:0; right:0; border-top:1px dashed #a16f77; }
+.foot .brand img { width:47px;height:47px; }
+.foot a { min-height:44px;display:inline-flex;align-items:center; }
+.foot > div { gap:1.3rem; }
+.admin #design-form .photo-panel { background:#f7eeea; }
+.admin .picker input { background:var(--paper); }
+@media(max-width:760px){
+ .header { min-height:76px; }
+ .header .brand span { font-size:1.62rem; }
+ .header .brand img { width:48px;height:48px; }
+ .hero .herogrid { gap:1.5rem; }
+}
+@media(max-width:620px){
+ .header { align-items:center; padding:.65rem 0 0; gap:.35rem; }
+ .header nav { justify-content:space-around; }
+ .header nav a { padding-inline:.18rem; }
+ .hero .herogrid { grid-template-columns:minmax(0,1fr); width:calc(100% - 36px); padding:1.6rem 0; gap:1.15rem; }
+ .herocopy { padding:0; }
+ .herocopy h1 { font-size:clamp(3rem,11.4vw,4.25rem); }
+ .herocopy p:not(.eyebrow) { margin:.75rem 0; }
+ .heroart { aspect-ratio:1.75; }
+ .heroart.garment { aspect-ratio:1.5; }
+ .hero .actions { gap:.7rem; flex-direction:row; }
+ .hero .actions a { font-size:.88rem; }
+ .storyinner { align-items:center; }
+ .storyinner img { width:66px; }
+ .thumbs button { min-width:44px;min-height:44px; }
+ .foot > div { gap:1.05rem; }
+}
+@media(max-width:360px){.header nav a{font-size:.83rem}.hero .actions{gap:.4rem}}
+
+/* Fixed dimensions reserve space for the two-part studio signature. */
+.brand .brand-name { display:grid; justify-items:center; gap:.32rem; }
+.brand .signature { width:clamp(156px,14vw,207px); max-width:100%; height:auto; }
+.brand small { font-size:.64rem; line-height:1.15; margin:0; }
+.foot .signature { filter:brightness(0) invert(96%); }
+.showcase { min-width:0; margin:0; }
+.showcase figcaption {
+  display:flex; justify-content:space-between; align-items:baseline;
+  gap:.35rem 1rem; flex-wrap:wrap; padding:.55rem .15rem 0;
+}
+.showcase figcaption a { font-family:var(--serif); font-size:1.48rem; font-weight:600; }
+.showcase figcaption span,.photo-caption { color:var(--muted); font-size:.88rem; }
+.full-photo { display:block; cursor:zoom-in; }
+.photo-caption { margin:.45rem 0 .7rem; }
+.thumbs button[aria-pressed=true] { outline:2px solid var(--rose); outline-offset:1px; }
+.detail > *, .about > *, .contact-layout > *, .photo-row > *, .row > * { min-width:0; }
+#selection { display:flow-root; }
+.selected-piece { display:flex; min-height:44px; align-items:center; gap:.85rem; font-weight:600; margin-bottom:.6rem; }
+.selected-piece img { width:72px; height:72px; object-fit:contain; border:1px solid var(--line); border-radius:4px; background:var(--paper); }
+#form-status:empty { display:none; }
+.header nav a,.foot a,.filters button { min-height:44px; }
+@media (hover:none) { .card a:hover img { transform:none; } }
+@media (min-width:621px) and (max-width:860px) {
+  .header { flex-wrap:wrap; justify-content:center; gap:.25rem 2rem; padding-block:.55rem; }
+  .hero .herogrid { gap:1.25rem; }
+  .herocopy h1 { font-size:clamp(2.8rem,6.5vw,3.8rem); }
+}
+@media (max-width:620px) {
+  .header .brand .signature { width:150px; height:auto; }
+  .header nav { flex-wrap:wrap; column-gap:.3rem; row-gap:0; }
+  .card-info small { font-size:.76rem; letter-spacing:.07em; }
+  .secthead { flex-wrap:wrap; gap:.35rem 1rem; }
+  .detail { gap:1.25rem; }
+  .detail h1 { font-size:clamp(2.6rem,10.5vw,3.8rem); }
+  .btn,.filters button { touch-action:manipulation; }
+  .photo-row .tools button { min-height:44px; }
+  .row { flex-wrap:wrap; }
+  .rowdesc { min-width:min(10rem,100%); }
+  .row .tools { flex-wrap:wrap; }
+}
+@media (max-width:370px) {
+  .storyinner { flex-direction:column; align-items:flex-start; gap:1rem; }
+  .tools { max-width:100%; }
+}

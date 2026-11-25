@@ -35,7 +35,18 @@ if(product)product.addEventListener('submit',ev=>{
   location.assign(target.href);
 });
 refreshAvailability();if(document.querySelector('[data-close]'))setInterval(refreshAvailability,30000);
-document.querySelectorAll('[data-photo]').forEach(b=>b.onclick=()=>{const pic=document.querySelector('#main-photo');pic.src=b.dataset.photo;pic.alt=b.dataset.alt;});
+const thumbnails = document.querySelectorAll('[data-photo]');
+for (const thumb of thumbnails) {
+  thumb.onclick = () => {
+    const photo = document.querySelector('#main-photo');
+    photo.src = thumb.dataset.photo;
+    photo.alt = thumb.dataset.alt;
+    document.querySelector('#full-photo').href = photo.src;
+    document.querySelector('#full-photo-link').href = photo.src;
+    document.querySelector('#media-kind').textContent = thumb.dataset.illustration === 'true' ? 'Design illustration · ' : '';
+    for (const other of thumbnails) other.setAttribute('aria-pressed', String(other === thumb));
+  };
+}
 const form=document.querySelector('#inquiry');
 if(form){
   const selected=document.querySelector('#selection');
@@ -45,10 +56,9 @@ if(form){
     const line=document.createElement('p');line.textContent=label+' · '+value.slice(0,200);selected.append(line);
     const input=document.createElement('input');input.type='hidden';input.name=key;input.value=value.slice(0,200);form.append(input);
   }
-  selected.hidden=!selected.childElementCount;
-  if(/^[a-z0-9][a-z0-9-]{0,79}$/.test(params.get('id')||'')){
-    const edit=document.createElement('a');edit.href='../designs/'+params.get('id')+'/index.html';edit.textContent='View design';selected.append(edit);
-  }
+  const preview = document.getElementById('preview-' + (params.get('id') || ''));
+  if (preview?.tagName === 'TEMPLATE') selected.prepend(preview.content.cloneNode(true));
+  selected.hidden = !selected.childElementCount;
   const type=form.elements.type;type.onchange=()=>{
     const general=type.value==='General question';
     form.querySelector('#order-fields').hidden=general;
