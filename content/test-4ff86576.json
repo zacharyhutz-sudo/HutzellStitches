@@ -1,0 +1,23 @@
+{
+  "id": "test-4ff86576",
+  "title": "Test",
+  "category": "Apparel",
+  "status": "Draft",
+  "availability": "Made to order",
+  "featured": false,
+  "rank": 10,
+  "price": "$30",
+  "closeAt": "",
+  "description": "",
+  "styles": [],
+  "colors": [
+    "Red",
+    "Green"
+  ],
+  "sizes": [
+    "A",
+    "M"
+  ],
+  "prompt": "Name or initials",
+  "photos": []
+}
