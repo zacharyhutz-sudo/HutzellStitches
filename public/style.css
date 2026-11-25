@@ -310,17 +310,12 @@ footer::before { border-color:#8b5866; }
   background:radial-gradient(ellipse at 50% 100%,var(--paper) 0 57%,transparent 62%) left bottom/20px 12px repeat-x;
 }
 .thread-hero-inner {
-  position:relative; display:grid; grid-template-columns:minmax(0,1.12fr) minmax(0,.88fr);
-  gap:clamp(1rem,4vw,4rem); min-height:clamp(365px,34vw,495px);
+  min-height:clamp(365px,34vw,495px);
   padding-block:clamp(2.3rem,4.1vw,4.4rem);
 }
-.thread-intro { max-width:100%; }
+.thread-intro { max-width:62%; }
 .thread-intro h1 { font-size:clamp(3.4rem,6.7vw,6.25rem); line-height:.94; }
 .thread-art { opacity:.69; }
-.hero-engraving {
-  justify-self:center; width:min(100%,365px); height:auto;
-  filter:drop-shadow(1px 6px 2px #764a4521);
-}
 .thread-intro > p:not(.eyebrow) { max-width:33ch; }
 .facebook-section {
   max-width:1060px; display:grid;
@@ -390,16 +385,13 @@ footer::before { border-color:#8b5866; }
 }
 @media (max-width:620px) {
   .thread-hero-inner {
-    grid-template-columns:minmax(0,1fr) clamp(62px,20vw,104px);
-    grid-template-areas:"place place" "title title" "description drawing" "actions actions";
-    min-height:0; gap:.55rem .85rem; padding:1.65rem 0 1.9rem;
+    min-height:0; padding:1.65rem 0 1.9rem;
   }
-  .thread-intro { display:contents; }
-  .thread-intro .eyebrow { grid-area:place; margin:0; }
-  .thread-intro h1 { grid-area:title; font-size:clamp(2.8rem,11.3vw,4.05rem); max-width:100%; }
-  .thread-intro > p:not(.eyebrow) { grid-area:description; max-width:27ch; font-size:1rem; margin:.2rem 0; }
-  .thread-intro .actions { grid-area:actions; margin-top:.15rem; }
-  .hero-engraving { grid-area:drawing; width:100%; transform:rotate(3deg); }
+  .thread-intro { max-width:100%; }
+  .thread-intro .eyebrow { margin:0 0 .55rem; }
+  .thread-intro h1 { font-size:clamp(2.8rem,11.3vw,4.05rem); }
+  .thread-intro > p:not(.eyebrow) { max-width:29ch; font-size:1rem; margin:.6rem 0; }
+  .thread-intro .actions { margin-top:.55rem; }
   .thread-art { opacity:.7; }
   .thread-hero::after { height:7px; }
   .facebook-section { padding-top:1.1rem; }

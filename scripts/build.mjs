@@ -12,7 +12,14 @@ if(process.env.NETLIFY && (process.env.GIFT_PREVIEW_READY!=='yes'||process.env.C
 const esc=s=>String(s??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
 const rawFiles=(await readdir('content')).filter(f=>f.endsWith('.json'));
 const items=(await Promise.all(rawFiles.map(async f=>validate(JSON.parse(await readFile('content/'+f,'utf8')))))).filter(i=>i.status==='Published').sort((a,b)=>a.rank-b.rank||a.title.localeCompare(b.title));
-await cp('public',out,{recursive:true,filter:src=>!['pumpkin.webp','bow.webp'].includes(path.basename(src))});
+const excludedArt = new Set([
+  'pumpkin.webp', 'bow.webp',
+  'sewing-engraving-360.webp', 'sewing-engraving-760.webp'
+]);
+await cp('public', out, {
+  recursive: true,
+  filter: src => !excludedArt.has(path.basename(src))
+});
 await mkdir(out+'/vendor',{recursive:true});
 await cp('node_modules/heic-to/dist/heic-to.min.js',out+'/vendor/heic-to.mjs');
 await cp('node_modules/heic-to/LICENSE',out+'/vendor/heic-to-LICENSE.txt');
@@ -69,7 +76,6 @@ await page('index.html','Home','Personalized embroidery in Monroe, Georgia','Per
     <h1>Embroidery,<br><em>made personal.</em></h1>
     <p>Personalized apparel and keepsakes from Rachel’s home studio.</p>
     <div class="actions">${button('Browse Apparel & Gifts','apparel-and-gifts/index.html')}<a class="textlink" href="contact/index.html">Custom orders</a></div></div>
-    <img class="hero-engraving" src="art/sewing-engraving-360.webp" srcset="art/sewing-engraving-360.webp 360w, art/sewing-engraving-760.webp 760w" sizes="(max-width:620px) 30vw, (max-width:1040px) 35vw, 390px" width="760" height="760" alt="">
   </div>
 </section>
 <section class="wrap block facebook-section" aria-labelledby="featured-designs">
