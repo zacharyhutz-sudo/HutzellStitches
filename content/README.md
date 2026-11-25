@@ -1,0 +1,1 @@
+Each JSON file holds one design and its photo references or compact photo uploads. Keep this directory in the private repository even when the catalog is empty. Only the build's published output belongs on the web.

@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Hutzell Stitches · Deployment walkthrough</title>
+  <style>
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+<style>body{max-width:800px;color:#32262a;background:#fffcf8;font:16px/1.6 system-ui;margin:auto;padding:clamp(18px,5vw,60px)}h1,h2{font-family:Georgia,serif;font-weight:normal;color:#713c4e}table{display:block;overflow-x:auto}a{color:#814657}td,th{padding:.5em}code{overflow-wrap:anywhere} .preview{display:inline-block;background:#814657;color:white;padding:.8em 1.1em;border-radius:5px;text-decoration:none}</style></head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Hutzell Stitches · Deployment walkthrough</h1>
+</header><p><a class="preview" href="dist/index.html">Open the private website preview</a></p>
+<h1 id="hutzell-stitches-embroidery-first-draft">Hutzell Stitches
+Embroidery · first draft</h1>
+<h2 id="preview-it-before-connecting-any-accounts">Preview it before
+connecting any accounts</h2>
+<p>Extract the entire ZIP. Open <code>dist/index.html</code> in a
+desktop browser. The four pages, catalog filters, design options, and
+disabled inquiry form work from the included build. Keep the extracted
+folders together. The footer admin uses server functions and becomes
+usable on Netlify.</p>
+<p>The blush spool mark and product illustrations are draft artwork. The
+hoop photograph is an AI-generated studio illustration. The pumpkin
+design and garment choices are based on Rachel’s public September 28
+post. The ribbon design is a proposed gift idea. Confirm artwork, sizes,
+prices and seasonal availability before opening orders.</p>
+<h2 id="put-the-source-in-a-private-github-repository">1. Put the source
+in a private GitHub repository</h2>
+<p>Use your own account and create an empty <strong>Private</strong>
+repository on the <strong>main</strong> branch. Use a neutral name such
+as <strong>studio-preview</strong> if you share a device or account.
+Upload the extracted project contents using <strong>Add file → Upload
+files</strong>, then commit. At the top level you should see
+<strong>netlify.toml</strong>, <strong>package.json</strong>,
+<strong>public</strong>, <strong>content</strong>,
+<strong>server</strong>, <strong>scripts</strong>, and
+<strong>netlify</strong>. Upload the folders themselves, not the ZIP or
+a single enclosing project folder. The <strong>dist</strong> folder is
+an offline preview and can be omitted from GitHub. Do not invite Rachel,
+add her as a collaborator, or use an organization that she can access
+during the surprise.</p>
+<h2 id="create-the-neutral-netlify-project">2. Create the neutral
+Netlify project</h2>
+<p>In your own Netlify team, choose <strong>Add new project → Import an
+existing project → GitHub</strong>. Select the private repository, give
+the project a neutral name and use these settings.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Setting</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Production branch</td>
+<td>main</td>
+</tr>
+<tr class="even">
+<td>Base directory</td>
+<td>Leave blank</td>
+</tr>
+<tr class="odd">
+<td>Build command</td>
+<td>npm run build</td>
+</tr>
+<tr class="even">
+<td>Publish directory</td>
+<td>dist</td>
+</tr>
+<tr class="odd">
+<td>Functions directory</td>
+<td>netlify/functions</td>
+</tr>
+<tr class="even">
+<td>Node version</td>
+<td>22 (in netlify.toml)</td>
+</tr>
+</tbody>
+</table>
+<p>Start the first deployment with <strong>GIFT_PREVIEW_READY
+unset</strong>. This builds a neutral holding page even if the project
+URL is accessible. Branch and pull-request builds also return the
+holding page. No other deploy notification integration is needed.</p>
+<p>Open the project’s <strong>Project visibility</strong> or
+<strong>Password Protection</strong> controls. Set production and
+previews to <strong>private / team-only</strong> in an account only you
+can access, or protect <strong>all deploys</strong> with a site-wide
+password if available. In a logged-out private browser window, verify
+the Netlify URL requires access. The Admin password protects catalog
+edits. Storefront privacy is a separate Netlify setting. If your account
+only offers public hosting, keep the neutral deployment and use the
+included offline preview until the reveal. Avoid Netlify Drop for this
+project.</p>
+<h2 id="give-the-editor-access-to-this-one-repository">3. Give the
+editor access to this one repository</h2>
+<p>In GitHub, go to <strong>Settings → Developer settings → Personal
+access tokens → Fine-grained tokens → Generate new token</strong>. Pick
+the repo owner, choose <strong>Only select repositories</strong>, and
+select this private repository. Under <strong>Repository
+permissions</strong>, set <strong>Contents</strong> to <strong>Read and
+write</strong>. Choose an expiry and keep a reminder. Copy the token
+directly to a private Netlify environment variable. Never commit it to
+GitHub or paste it into the website. If the production branch requires
+pull requests, give this integration an approved write path before
+testing. Direct editor saves create commits on main.</p>
+<h2 id="add-the-netlify-settings">4. Add the Netlify settings</h2>
+<p>The footer <strong>Admin</strong> password for this draft is
+<strong>embroidery</strong>. The ZIP includes its password hash and the
+site derives a signing key from the repository token on Netlify. You can
+skip the password setup script.</p>
+<p>Open <strong>Project configuration → Environment variables</strong>.
+Use the <strong>Production</strong> context and the scopes below if your
+plan supports them.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Value</th>
+<th>Scope</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>CATALOG_REPO</td>
+<td>Your GitHub owner/repository, e.g. your-username/studio-preview</td>
+<td>Functions</td>
+</tr>
+<tr class="even">
+<td>CATALOG_TOKEN</td>
+<td>The fine-grained token for this repository</td>
+<td>Functions</td>
+</tr>
+<tr class="odd">
+<td>GIFT_PREVIEW_READY</td>
+<td>yes, after verifying storefront access</td>
+<td>Builds and Functions</td>
+</tr>
+</tbody>
+</table>
+<p>If you entered a different <code>ADMIN_PASSWORD_HASH</code> while
+setting up the first ZIP, remove that variable to use
+<strong>embroidery</strong>. The catalog branch defaults to
+<code>main</code>.</p>
+<p>Leave <strong>ENABLE_FORMSPREE</strong> and
+<strong>FORMSPREE_FORM_ID</strong> unset. A build with these settings
+cannot send a customer inquiry. No messages or invitations to Rachel are
+part of setup.</p>
+<h2 id="build-and-check-the-private-draft">5. Build and check the
+private draft</h2>
+<p>In <strong>Deploys</strong>, select <strong>Trigger deploy → Deploy
+project</strong>. Once the deploy is published, visit the project while
+signed into your authorized Netlify account. Check the storefront from
+your phone, and repeat the signed-out access test. Each public page
+includes a discreet <strong>Admin</strong> link in its footer.</p>
+<ol type="1">
+<li>Sign in with <strong>embroidery</strong>. Choose <strong>Add
+item</strong>. Add a title and description, upload an image, enter alt
+text, and save as <strong>Draft</strong>.</li>
+<li>Edit the design, change it to <strong>Published</strong>, check
+<strong>Feature on Home</strong>, and save. The editor reports when the
+commit has reached the storefront. A foreground tab updates the status
+for up to four minutes. Netlify’s deploy log is authoritative if a build
+takes longer.</li>
+<li>Open the design, choose options, and continue to Contact. Check that
+the summary matches and <strong>Submissions disabled</strong> is
+visible. No email test is necessary.</li>
+<li>Set the temporary design to <strong>Archived</strong>, save, and
+verify that it disappears. You can restore it by selecting
+<strong>Published</strong> again. Delete is also available. GitHub
+history retains prior committed versions.</li>
+<li>Sign out and check that a fresh visit to Admin asks for the studio
+password.</li>
+</ol>
+<h2 id="formspree-after-the-surprise">Formspree after the surprise</h2>
+<p>The intended initial recipient is
+<strong>zacharyhutz@gmail.com</strong>. No endpoint is configured and
+the draft sends no messages. When you choose to turn it on, sign into
+your own <a href="https://formspree.io/forms">Formspree dashboard</a>,
+create a form, set its target to that address and complete email
+verification if prompted. Check all notification and automation
+recipients. Copy the ID from the endpoint
+<strong>https://formspree.io/f/FORM_ID</strong>.</p>
+<p>Set <strong>FORMSPREE_FORM_ID</strong> to the ID alone and
+<strong>ENABLE_FORMSPREE</strong> to <strong>yes</strong> in Netlify’s
+production <strong>Builds</strong> environment. Redeploy. Only after
+enabling it, send a test from the site and confirm receipt in Zach’s
+inbox. Disable sending again by removing the enable flag and
+redeploying. An email address alone cannot replace a Formspree
+endpoint.</p>
+<h2 id="common-deployment-issues">Common deployment issues</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Symptom</th>
+<th>What to check</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Only the neutral page appears</td>
+<td>Confirm private access first. Set GIFT_PREVIEW_READY=yes for Builds
+and Functions, then redeploy the production branch.</td>
+</tr>
+<tr class="even">
+<td>Admin says setup is incomplete</td>
+<td>Check CATALOG_REPO and CATALOG_TOKEN in the production Functions
+environment, then redeploy.</td>
+</tr>
+<tr class="odd">
+<td>Login works but the catalog fails</td>
+<td>Confirm the GitHub owner/repo, token expiration, Contents permission
+and branch. Preserve content/README.md so an empty catalog remains
+editable.</td>
+</tr>
+<tr class="even">
+<td>A save conflicts</td>
+<td>Reopen the listing to load the latest revision and reapply the
+edit.</td>
+</tr>
+<tr class="odd">
+<td>An edit is saved but not visible</td>
+<td>Check the Netlify production deploy for the matching GitHub commit.
+Verify status is Published and a photo has alt text.</td>
+</tr>
+<tr class="even">
+<td>Password needs replacing</td>
+<td>Run <code>node scripts/admin-setup.mjs</code> to create a new
+password. Save the printed ADMIN_PASSWORD_HASH and SESSION_SECRET as
+production Functions variables and redeploy. Changing the signing secret
+ends previous sessions.</td>
+</tr>
+<tr class="odd">
+<td>Ready to reveal</td>
+<td>Confirm Rachel’s approved branding and catalog, then choose when to
+open visibility and connect a custom domain. For public search indexing,
+remove the draft robots meta tag in scripts/build.mjs, the Disallow line
+in its robots output, and the X-Robots-Tag in netlify.toml. Redeploy and
+verify.</td>
+</tr>
+</tbody>
+</table>
+<p>References: <a
+href="https://docs.netlify.com/start/quickstarts/deploy-from-repository/">Netlify
+repository deployment</a>, <a
+href="https://docs.netlify.com/deploy/protect-deploys/">deploy privacy
+controls</a>, <a
+href="https://docs.netlify.com/build/functions/environment-variables/">function
+environment variables</a>, <a
+href="https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens">fine-grained
+GitHub tokens</a>, <a
+href="https://help.formspree.io/articles/form-and-project-settings/changing-a-form-email-address">Formspree
+target emails</a>.</p>
+</body>
+</html>
