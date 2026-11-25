@@ -55,13 +55,15 @@ if(process.env.COMMIT_REF)commits.unshift(process.env.COMMIT_REF);
 await writeFile(out+'/release.json',JSON.stringify({commits}));
 function button(label,href,secondary=false){return '<a class="btn '+(secondary?'outline':'')+'" href="'+esc(href)+'">'+esc(label)+'</a>';}
 function intro(k,title,desc){return '<div class="intro"><p class="eyebrow">'+k+'</p><h1>'+title+'</h1><p>'+desc+'</p></div>';}
-const brand = root => '<span class="brand"><img class="spool" width="62" height="62" src="' + root +
-  'art/brand.svg" alt=""><span class="brand-name"><img class="signature" width="200" height="28" src="' +
-  root + 'art/signature.svg" alt="Hutzell Stitches"><small>EMBROIDERY</small></span></span>';
+const brand = root => `<span class="brand">
+  <img class="spool" src="${root}art/studio-spool.webp" width="66" height="45" alt="">
+  <span class="brand-name"><img class="signature" src="${root}art/studio-wordmark.webp" width="195" height="54" alt="Hutzell Stitches"><small>Embroidery</small></span>
+</span>`;
 async function page(file,active,title,desc,render,photo=hero){
  const r='../'.repeat(file.split('/').length-1);const url=(process.env.URL||'').replace(/\/$/,'');
+ const section = file.startsWith('designs/') ? 'design' : file.split('/')[0].replace('index.html', 'home');
  const menu=pages.map(([n,f])=>'<a '+(active===n?'aria-current="page" ':'')+'href="'+r+f+'">'+esc(n)+'</a>').join('');
- const html='<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>'+esc(title)+' · Hutzell Stitches Embroidery</title><meta name="description" content="'+esc(desc)+'"><meta property="og:title" content="'+esc(title)+'"><meta property="og:description" content="'+esc(desc)+'"><meta property="og:image" content="'+esc(url?url+'/'+photo:r+photo)+'"><link rel="icon" href="'+r+'art/spool-icon.svg"><link rel="stylesheet" href="'+r+'style.css"><script src="'+r+'site.js" defer></script></head><body><a href="#main" class="skip">Skip to content</a><header><div class="wrap header"><a class="brandlink" href="'+r+'index.html">'+brand(r)+'</a><nav aria-label="Main navigation">'+menu+'</nav></div></header><main id="main">'+render(r)+'</main><footer><div class="wrap foot"><a class="brandlink" href="'+r+'index.html">'+brand(r)+'</a><span>Monroe, Georgia</span><div><a href="'+facebookPage+'">Facebook</a><a href="https://www.instagram.com/hutzellstitches/">Instagram</a><a href="'+r+'admin/index.html">Admin</a></div></div></footer></body></html>';
+ const html='<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>'+esc(title)+' · Hutzell Stitches Embroidery</title><meta name="description" content="'+esc(desc)+'"><meta property="og:title" content="'+esc(title)+'"><meta property="og:description" content="'+esc(desc)+'"><meta property="og:image" content="'+esc(url?url+'/'+photo:r+photo)+'"><link rel="icon" href="'+r+'art/spool-icon.svg"><link rel="stylesheet" href="'+r+'style.css"><script src="'+r+'site.js" defer></script></head><body class="page-'+section+'"><a href="#main" class="skip">Skip to content</a><header><div class="wrap header"><a class="brandlink" href="'+r+'index.html">'+brand(r)+'</a><nav aria-label="Main navigation">'+menu+'</nav></div></header><main id="main">'+render(r)+'</main><footer><div class="wrap foot"><a class="brandlink" href="'+r+'index.html">'+brand(r)+'</a><span>Monroe, Georgia</span><div><a href="'+facebookPage+'">Facebook</a><a href="https://www.instagram.com/hutzellstitches/">Instagram</a><a href="'+r+'admin/index.html">Admin</a></div></div></footer></body></html>';
  await mkdir(path.dirname(out+'/'+file),{recursive:true});await writeFile(out+'/'+file,html);
 }
 const card=(i,r)=>'<article class="card" data-category="'+i.category+'"><a href="'+r+'designs/'+i.id+'/index.html"><div class="card-img"><img loading="lazy" src="'+r+i.photos[0].src+'" alt="'+esc(i.photos[0].alt)+'"></div><div class="card-info"><small>'+i.category+(isIllustration(i.photos[0])?' · Design illustration':'')+'</small><h3>'+esc(i.title)+'</h3><span data-availability="'+esc(i.availability)+'" data-close="'+esc(i.closeAt)+'">'+esc(i.availability)+'</span>'+(i.price?' · '+esc(i.price):'')+'</div></a></article>';
@@ -72,21 +74,28 @@ await page('index.html','Home','Personalized embroidery in Monroe, Georgia','Per
     <img fetchpriority="high" width="1920" height="768" src="${hero}" srcset="art/stitched-landscape-960.webp 960w, ${hero} 1920w" sizes="100vw" alt="">
   </picture>
   <div class="wrap thread-hero-inner">
-    <div class="thread-intro"><p class="eyebrow"><span class="line"></span> Monroe, Georgia</p>
+    <div class="thread-intro"><p class="eyebrow">Monroe, Georgia</p>
     <h1>Embroidery,<br><em>made personal.</em></h1>
     <p>Personalized apparel and keepsakes from Rachel’s home studio.</p>
-    <div class="actions">${button('Browse Apparel & Gifts','apparel-and-gifts/index.html')}<a class="textlink" href="contact/index.html">Custom orders</a></div></div>
+    <div class="actions">${button('Apparel & Gifts','apparel-and-gifts/index.html')}<a class="textlink" href="contact/index.html">Custom orders</a></div></div>
+    <div class="hero-label" aria-hidden="true"><img width="520" height="500" src="art/studio-badge.webp" alt=""></div>
   </div>
 </section>
 <section class="wrap block facebook-section" aria-labelledby="featured-designs">
-  <div class="feed-copy">
-    <p class="eyebrow">From Rachel’s Facebook page</p>
-    <h2 id="featured-designs">Featured <em>designs</em></h2>
-    <a class="textlink" href="${facebookPage}">View posts on Facebook</a>
+  <div class="feed-panel">
+    <div class="feed-copy">
+      <p class="eyebrow">From Rachel’s Facebook page</p>
+      <h2 id="featured-designs">Featured <em>designs</em></h2>
+      <div class="feed-actions">
+        <button class="btn outline" id="feed-toggle" type="button" aria-expanded="false" aria-controls="studio-feed" hidden>Show recent posts</button>
+        <a class="textlink" href="${facebookPage}">Open on Facebook</a>
+      </div>
+    </div>
+    <div class="timeline" id="studio-feed" data-timeline="${esc(timeline.href)}" hidden></div>
+    <button class="textlink feed-close" id="feed-close" type="button" hidden>Close posts</button>
   </div>
-  <div class="timeline" data-timeline="${esc(timeline.href)}"></div>
   <aside class="studio-note" aria-labelledby="meet-rachel">
-    <div class="note-photo"><img loading="lazy" src="art/rachel-family-560.webp" width="560" height="840" alt="Rachel and her family beneath a magnolia tree"><img class="note-seal" loading="lazy" src="art/facebook-badge.webp" width="80" height="80" alt=""></div>
+    <div class="note-photo"><img loading="lazy" src="art/rachel-family-560.webp" width="560" height="840" alt="Rachel and her family beneath a magnolia tree"><img class="note-seal" loading="lazy" src="art/studio-badge.webp" width="80" height="80" alt=""></div>
     <h2 id="meet-rachel">Hi, I’m <em>Rachel.</em></h2>
     <p>Welcome to my in-home embroidery studio in Monroe, Georgia. I make personalized apparel and gifts, one name and one design at a time.</p>
     <a class="textlink" href="about/index.html">Meet the studio</a>

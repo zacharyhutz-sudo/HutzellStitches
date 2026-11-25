@@ -77,29 +77,73 @@ if(form){
 
 const timeline = document.querySelector('[data-timeline]');
 if (timeline) {
-  const frame = document.createElement('iframe');
-  frame.title = 'Recent Facebook posts from Hutzell Stitches Embroidery';
-  frame.loading = 'lazy';
-  const feedUrl = new URL(timeline.dataset.timeline);
-  frame.height = feedUrl.searchParams.get('height');
-  frame.referrerPolicy = 'strict-origin-when-cross-origin';
-  let previousWidth = 0;
-  function fitTimeline() {
+  const compact = matchMedia('(max-width: 760px), (pointer: coarse)');
+  const toggle = document.getElementById('feed-toggle');
+  const close = document.getElementById('feed-close');
+  let expanded = false;
+  let resizeTimer;
+  let lastViewportWidth = window.innerWidth;
+
+  function renderFeed() {
+    if (!compact.matches) expanded = false;
+    const visible = !compact.matches || expanded;
+    toggle.hidden = !compact.matches;
+    toggle.setAttribute('aria-expanded', String(expanded && compact.matches));
+    toggle.textContent = expanded ? 'Hide recent posts' : 'Show recent posts';
+    close.hidden = !compact.matches || !expanded;
+    timeline.hidden = !visible;
+    if (!visible) {
+      timeline.replaceChildren();
+      return;
+    }
+
     const width = Math.min(500, Math.floor(timeline.clientWidth));
-    if (width < 180 || width === previousWidth) return;
-    previousWidth = width;
-    const url = new URL(feedUrl);
+    if (width < 180) return;
+    // Ignore transient browser chrome height changes during a swipe.
+    const height = compact.matches ? Math.min(440, Math.floor(window.innerHeight * .60)) : 1160;
+    const frame = timeline.querySelector('iframe');
+    if (frame && frame.width === String(width) && frame.height === String(height)) return;
+    const url = new URL(timeline.dataset.timeline);
     url.searchParams.set('width', String(width));
-    frame.width = String(width);
-    frame.src = url.href;
-    if (!frame.isConnected) timeline.append(frame);
+    url.searchParams.set('height', String(height));
+    const nextFrame = document.createElement('iframe');
+    nextFrame.title = 'Recent Facebook posts from Hutzell Stitches Embroidery';
+    nextFrame.loading = compact.matches ? 'eager' : 'lazy';
+    nextFrame.referrerPolicy = 'strict-origin-when-cross-origin';
+    nextFrame.width = String(width);
+    nextFrame.height = String(height);
+    nextFrame.src = url.href;
+    timeline.replaceChildren(nextFrame);
   }
-  fitTimeline();
-  let timer;
+
+  toggle.addEventListener('click', () => {
+    expanded = !expanded;
+    renderFeed();
+  });
+  close.addEventListener('click', () => {
+    expanded = false;
+    renderFeed();
+    toggle.focus();
+  });
+  compact.addEventListener('change', renderFeed);
   function scheduleFit() {
-    clearTimeout(timer);
-    timer = setTimeout(fitTimeline, 200);
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(renderFeed, 120);
   }
-  if ('ResizeObserver' in window) new ResizeObserver(scheduleFit).observe(timeline);
-  else window.addEventListener('resize', scheduleFit);
+  // The panel can change width even while the viewport stays the same.
+  if ('ResizeObserver' in window) {
+    let lastPanelWidth = 0;
+    new ResizeObserver(([entry]) => {
+      if (lastPanelWidth === entry.contentRect.width) return;
+      lastPanelWidth = entry.contentRect.width;
+      scheduleFit();
+    }).observe(timeline.parentElement);
+  }
+  window.addEventListener('resize', () => {
+    if (window.innerWidth !== lastViewportWidth) {
+      lastViewportWidth = window.innerWidth;
+      scheduleFit();
+    }
+  });
+  renderFeed();
 }
