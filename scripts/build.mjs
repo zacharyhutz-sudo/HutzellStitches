@@ -21,10 +21,15 @@ for(const i of items)for(const [n,p] of i.photos.entries()){
   if(p.src.startsWith('data:')){const file='photos/'+i.id+'-'+n+(p.src.startsWith('data:image/jpeg')?'.jpg':'.webp');await writeFile(out+'/'+file,Buffer.from(p.src.split(',')[1],'base64'));p.src=file;}
   else{await cp('public/art/'+p.src,out+'/art/'+p.src);p.src='art/'+p.src;}
 }
-const studioPhoto = 'art/studio.webp';
-const featured = items.filter(item => item.featured);
-const picturedDesign = featured.find(item => item.photos[0].src.startsWith('photos/')) || featured[0];
-const hero = picturedDesign?.photos[0].src || studioPhoto;
+const hero = 'art/stitched-landscape-1920.webp';
+const portrait = 'art/rachel-family-960.webp';
+const facebookPage = 'https://www.facebook.com/people/Hutzell-Stitches-Embroidery/61586900660490/';
+// Meta's plugin resolves the numeric permalink even when the /people/ URL yields an empty widget.
+const timeline = new URL('https://www.facebook.com/plugins/page.php');
+timeline.search = new URLSearchParams({
+  href: 'https://www.facebook.com/61586900660490', tabs: 'timeline', height: '540',
+  small_header: 'true', hide_cover: 'false', show_facepile: 'false', adapt_container_width: 'true'
+}).toString();
 function isIllustration(photo) {
   return ['art/pumpkin.webp', 'art/bow.webp'].includes(photo.src);
 }
@@ -49,15 +54,42 @@ const brand = root => '<span class="brand"><img class="spool" width="62" height=
 async function page(file,active,title,desc,render,photo=hero){
  const r='../'.repeat(file.split('/').length-1);const url=(process.env.URL||'').replace(/\/$/,'');
  const menu=pages.map(([n,f])=>'<a '+(active===n?'aria-current="page" ':'')+'href="'+r+f+'">'+esc(n)+'</a>').join('');
- const html='<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>'+esc(title)+' · Hutzell Stitches Embroidery</title><meta name="description" content="'+esc(desc)+'"><meta property="og:title" content="'+esc(title)+'"><meta property="og:description" content="'+esc(desc)+'"><meta property="og:image" content="'+esc(url?url+'/'+photo:r+photo)+'"><link rel="icon" href="'+r+'art/spool-icon.svg"><link rel="stylesheet" href="'+r+'style.css"><script src="'+r+'site.js" defer></script></head><body><a href="#main" class="skip">Skip to content</a><header><div class="wrap header"><a class="brandlink" href="'+r+'index.html">'+brand(r)+'</a><nav aria-label="Main navigation">'+menu+'</nav></div></header><main id="main">'+render(r)+'</main><footer><div class="wrap foot"><a class="brandlink" href="'+r+'index.html">'+brand(r)+'</a><span>Monroe, Georgia</span><div><a href="https://www.facebook.com/share/1Cb9wG3enk/">Facebook</a><a href="https://www.instagram.com/hutzellstitches/">Instagram</a><a href="'+r+'admin/index.html">Admin</a></div></div></footer></body></html>';
+ const html='<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>'+esc(title)+' · Hutzell Stitches Embroidery</title><meta name="description" content="'+esc(desc)+'"><meta property="og:title" content="'+esc(title)+'"><meta property="og:description" content="'+esc(desc)+'"><meta property="og:image" content="'+esc(url?url+'/'+photo:r+photo)+'"><link rel="icon" href="'+r+'art/spool-icon.svg"><link rel="stylesheet" href="'+r+'style.css"><script src="'+r+'site.js" defer></script></head><body><a href="#main" class="skip">Skip to content</a><header><div class="wrap header"><a class="brandlink" href="'+r+'index.html">'+brand(r)+'</a><nav aria-label="Main navigation">'+menu+'</nav></div></header><main id="main">'+render(r)+'</main><footer><div class="wrap foot"><a class="brandlink" href="'+r+'index.html">'+brand(r)+'</a><span>Monroe, Georgia</span><div><a href="'+facebookPage+'">Facebook</a><a href="https://www.instagram.com/hutzellstitches/">Instagram</a><a href="'+r+'admin/index.html">Admin</a></div></div></footer></body></html>';
  await mkdir(path.dirname(out+'/'+file),{recursive:true});await writeFile(out+'/'+file,html);
 }
 const card=(i,r)=>'<article class="card" data-category="'+i.category+'"><a href="'+r+'designs/'+i.id+'/index.html"><div class="card-img"><img loading="lazy" src="'+r+i.photos[0].src+'" alt="'+esc(i.photos[0].alt)+'"></div><div class="card-info"><small>'+i.category+(isIllustration(i.photos[0])?' · Design illustration':'')+'</small><h3>'+esc(i.title)+'</h3><span data-availability="'+esc(i.availability)+'" data-close="'+esc(i.closeAt)+'">'+esc(i.availability)+'</span>'+(i.price?' · '+esc(i.price):'')+'</div></a></article>';
 await page('index.html','Home','Personalized embroidery in Monroe, Georgia','Personalized apparel, embroidered gifts and custom designs from Rachel’s in-home studio in Monroe, Georgia.',r=>`
-<section class="hero"><div class="wrap herogrid"><div class="herocopy"><p class="eyebrow"><span class="line"></span> Hutzell Stitches Embroidery</p><h1>Embroidery,<br><em>made personal.</em></h1><p>Personalized apparel and keepsakes from Rachel’s home studio in Monroe, Georgia.</p><div class="actions">${button('Browse Apparel & Gifts','apparel-and-gifts/index.html')}<a class="textlink" href="contact/index.html">Custom orders</a></div></div><figure class="showcase"><div class="heroart${picturedDesign?' garment':''}"><img fetchpriority="high" src="${esc(hero)}" alt="${esc(picturedDesign?.photos[0].alt || 'Illustrative still life of an embroidery hoop and blush thread')}"></div>${picturedDesign?`<figcaption><a href="designs/${esc(picturedDesign.id)}/index.html">${esc(picturedDesign.title)}</a><span>${isIllustration(picturedDesign.photos[0])?'Design illustration':esc(picturedDesign.category)}</span></figcaption>`:''}</figure></div></section>
-<section class="wrap block"><div class="secthead"><div><h2>Featured designs</h2></div><a class="textlink" href="apparel-and-gifts/index.html">View all designs</a></div><div class="cards">${featured.slice(0,4).map(i=>card(i,r)).join('')||'<p>Explore the catalog for the latest designs.</p>'}</div></section>
+<section class="thread-hero">
+  <picture class="thread-art" aria-hidden="true">
+    <source media="(max-width:620px)" srcset="art/stitched-landscape-phone.webp">
+    <img fetchpriority="high" width="1920" height="768" src="${hero}" srcset="art/stitched-landscape-960.webp 960w, ${hero} 1920w" sizes="100vw" alt="">
+  </picture>
+  <div class="wrap thread-hero-inner">
+    <div class="thread-intro"><p class="eyebrow"><span class="line"></span> Monroe, Georgia</p>
+    <h1>Embroidery,<br><em>made personal.</em></h1>
+    <p>Personalized apparel and keepsakes from Rachel’s home studio.</p>
+    <div class="actions">${button('Browse Apparel & Gifts','apparel-and-gifts/index.html')}<a class="textlink" href="contact/index.html">Custom orders</a></div></div>
+  </div>
+</section>
+<section class="wrap block facebook-section" aria-labelledby="featured-designs">
+  <div class="feed-copy">
+    <img width="92" height="92" loading="lazy" class="studio-seal" src="art/facebook-badge.webp" alt="Hutzell Stitches Embroidery">
+    <p class="eyebrow">From Rachel’s Facebook page</p>
+    <h2 id="featured-designs">Featured designs</h2>
+    <p>See what’s coming off the embroidery machine and catch the latest seasonal preorders.</p>
+    <a class="textlink" href="${facebookPage}">View posts on Facebook</a>
+  </div>
+  <div class="timeline" data-timeline="${esc(timeline.href)}"></div>
+</section>
 <section class="storystrip"><div class="wrap storyinner"><img src="art/brand.svg" alt=""><div><h2>Hi, I’m Rachel.</h2><p>Welcome to Hutzell Stitches, my in-home embroidery studio in Monroe, Georgia. I make personalized apparel and gifts, one name and one design at a time.</p><a class="textlink" href="about/index.html">Meet the studio</a></div></div></section>`);
-await page('about/index.html','About Us','About the studio','Meet Rachel and her Monroe, Georgia embroidery studio.',r=>`<div class="wrap about"><div class="about-img"><img src="${r+studioPhoto}" alt="Illustrative still life of a blush bow in an embroidery hoop"></div><article><p class="eyebrow">About the studio</p><h1>Hi, I’m <em>Rachel.</em></h1><p class="lead">Hutzell Stitches is my in-home embroidery studio in Monroe, Georgia.</p><p>I offer personalized apparel and gifts through custom orders, made-to-order designs, and seasonal preorders. You can start with a design you see here or bring me an idea of your own.</p><h2>Have a piece in mind?</h2><p>Tell me who it’s for, the name or initials you’d like stitched, and any colors you’re imagining. Those details are a good place for us to start.</p>${button('Explore the designs',r+'apparel-and-gifts/index.html')}</article></div>`,studioPhoto);
+await page('about/index.html','About Us','About the studio','Meet Rachel and her Monroe, Georgia embroidery studio.',r=>`<section class="wrap maker-story">
+  <div class="maker-hello"><p class="eyebrow">About the studio</p><h1>Hi, I’m <em>Rachel.</em></h1>
+  <p class="lead">Hutzell Stitches is my in-home embroidery studio in Monroe, Georgia.</p></div>
+  <figure class="family-portrait"><img src="${r+portrait}" srcset="${r}art/rachel-family-560.webp 560w, ${r+portrait} 960w" sizes="(max-width:620px) 88vw, (max-width:900px) 40vw, 430px" width="960" height="1440" alt="Rachel with her family outdoors beneath a magnolia tree"><figcaption>Rachel and her family</figcaption></figure>
+  <div class="maker-copy"><p>I offer personalized apparel and gifts through custom orders, made-to-order designs, and seasonal preorders. You can start with a design you see here or bring me an idea of your own.</p>
+  <h2>Have a piece in mind?</h2><p>Tell me who it’s for, the name or initials you’d like stitched, and any colors you’re imagining.</p>
+  ${button('Explore the designs',r+'apparel-and-gifts/index.html')}</div>
+</section>`,portrait);
 await page('apparel-and-gifts/index.html','Apparel & Gifts','Apparel & gifts','Browse embroidery designs for personalized apparel and gifts.',r=>`<section class="wrap block">${intro('The design collection','Apparel <em>&</em> gifts','Choose a design to see the details and explore personalization.')}<div class="filters" aria-label="Filter designs">${['All','Apparel','Gifts'].map((v,i)=>'<button type="button" data-filter="'+v+'" aria-pressed="'+(!i)+'">'+v+'</button>').join('')}</div><div class="cards">${items.map(i=>card(i,r)).join('')}</div><p id="empty" hidden>There are no designs in this category yet.</p></section>`);
 function select(label,name,values){return values.length?'<label>'+label+'<select name="'+name+'" required><option value="">Choose an option</option>'+values.map(v=>'<option>'+esc(v)+'</option>').join('')+'</select></label>':'';}
 for(const i of items)await page('designs/'+i.id+'/index.html','Apparel & Gifts',i.title,i.description,r=>`

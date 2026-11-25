@@ -74,3 +74,31 @@ if(form){
     }catch{status.textContent='Your inquiry could not be sent. Your entries are still here so you can try again.';send.disabled=false;}
   };
 }
+
+const timeline = document.querySelector('[data-timeline]');
+if (timeline) {
+  const frame = document.createElement('iframe');
+  frame.title = 'Recent Facebook posts from Hutzell Stitches Embroidery';
+  frame.loading = 'lazy';
+  frame.height = '540';
+  frame.referrerPolicy = 'strict-origin-when-cross-origin';
+  let previousWidth = 0;
+  function fitTimeline() {
+    const width = Math.min(500, Math.floor(timeline.clientWidth));
+    if (width < 180 || width === previousWidth) return;
+    previousWidth = width;
+    const url = new URL(timeline.dataset.timeline);
+    url.searchParams.set('width', String(width));
+    frame.width = String(width);
+    frame.src = url.href;
+    if (!frame.isConnected) timeline.append(frame);
+  }
+  fitTimeline();
+  let timer;
+  function scheduleFit() {
+    clearTimeout(timer);
+    timer = setTimeout(fitTimeline, 200);
+  }
+  if ('ResizeObserver' in window) new ResizeObserver(scheduleFit).observe(timeline);
+  else window.addEventListener('resize', scheduleFit);
+}
